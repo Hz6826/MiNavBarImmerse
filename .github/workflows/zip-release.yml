@@ -78,3 +78,23 @@ jobs:
           tag_name: AutoBuild_${{ steps.update_version.outputs.module_version }}
           files: MiNavBarImmerse_${{ steps.update_version.outputs.module_version }}.zip
           token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Post to Telegram Channel
+        env:
+          GROUP_ID: ${{ secrets.CHANNEL_ID }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          ZIP_FILE: "MiNavBarImmerse_${{ steps.update_version.outputs.module_version }}.zip"
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            COMMIT_MESSAGE="Manually run by ${{ github.actor }}"
+          else
+            COMMIT_MESSAGE="New push to GitHub
+            \`\`\`
+            ${{ github.event.head_commit.message }}
+            \`\`\`by \`${{ github.event.head_commit.author.name }}\`
+            See commit detail [here](${{ github.event.head_commit.url }})"
+          fi
+
+          cd ${{ github.workspace }}
+          curl -v "https://api.telegram.org/bot${BOT_TOKEN}/sendMediaGroup?chat_id=${GROUP_ID}&media=%5B%7B%22type%22:%22document%22,%20%22media%22:%22attach://zip%22,%22parse_mode%22:%22MarkdownV2%22,%22caption%22:$(python3 -c 'import json,os,urllib.parse; print(urllib.parse.quote(json.dumps(os.environ["COMMIT_MESSAGE"])))')%7D%5D" \
+            -F zip="@${ZIP_FILE}"
