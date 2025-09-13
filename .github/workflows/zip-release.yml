@@ -60,24 +60,28 @@ jobs:
           ZIP_NAME="MiNavBarImmerse_${{ steps.update_version.outputs.module_version }}.zip"
           cat <<EOF > update.json
           {
-            "version": "${{ steps.update_version.outputs.module_version }}",
-            "versionCode": ${{ steps.update_version.outputs.module_versionCode }},
-            "zipUrl": "https://github.com/${{ github.repository }}/releases/download/${{ steps.update_version.outputs.module_version }}/$ZIP_NAME",
-            "changelog": "https://raw.githubusercontent.com/${{ github.repository }}/main/changelog.md"
+          "version": "${{ steps.update_version.outputs.module_version }}",
+          "versionCode": ${{ steps.update_version.outputs.module_versionCode }},
+          "zipUrl": "https://github.com/${{ github.repository }}/releases/download/${{ steps.update_version.outputs.module_version }}/$ZIP_NAME",
+          "changelog": "https://raw.githubusercontent.com/${{ github.repository }}/main/changelog.md"
           }
           EOF
 
+      - name: Clean gh-pages branch
+        run: |
+          git fetch origin gh-pages
+          git checkout gh-pages || git checkout --orphan gh-pages
+          git rm -rf .
+          git clean -fxd
+
       - name: Push "update.json"
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./  
-          publish_branch: gh-pages
-          allow_empty_commit: true
-          keep_files: false
-          include: 'update.json'
-          exclude: '*'
-          commit_message: 'Version ${{ steps.update_version.outputs.module_version }}_${{ steps.update_version.outputs.module_versionCode }}'
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          cp update.json .
+          git add update.json
+          git commit -m "Version ${{ steps.update_version.outputs.module_version }}_${{ steps.update_version.outputs.module_versionCode }}" || echo "No changes"
+          git push origin gh-pages --force
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
@@ -97,11 +101,13 @@ jobs:
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             COMMIT_MESSAGE="Manually run by ${{ github.actor }}"
           else
-            COMMIT_MESSAGE="New push to GitHub
+            read -r -d '' COMMIT_MESSAGE << EOM
+            New push to GitHub
             \`\`\`
             ${{ github.event.head_commit.message }}
             \`\`\`by \`${{ github.event.head_commit.author.name }}\`
-            See commit detail [here](${{ github.event.head_commit.url }})"
+            See commit detail [here](${{ github.event.head_commit.url }})
+          EOM
           fi
 
           cd ${{ github.workspace }}
