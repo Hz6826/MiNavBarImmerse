@@ -89,17 +89,18 @@ jobs:
             COMMIT_MESSAGE="Manually run by ${{ github.actor }}"
           else
             COMMIT_MESSAGE="New push to GitHub
-            \`\`\`
-            ${{ github.event.head_commit.message }}
-            \`\`\`by \`${{ github.event.head_commit.author.name }}\`
-            See commit detail [here](${{ github.event.head_commit.url }})"
+          <pre>
+          ${{ github.event.head_commit.message }}
+          </pre>
+          by <code>${{ github.event.head_commit.author.name }}</code>
+          See commit detail <a href='${{ github.event.head_commit.url }}'>here</a>"
           fi
 
           cd ${{ github.workspace }}
           curl -F chat_id=${GROUP_ID} \
-               -F message_thread_id=39 \
                -F document=@"${ZIP_FILE}" \
-               -F parse_mode="MarkdownV2" \
+               -F parse_mode="HTML" \
                -F caption="$COMMIT_MESSAGE" \
                https://api.telegram.org/bot${BOT_TOKEN}/sendDocument
+
 
