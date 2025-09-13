@@ -74,14 +74,24 @@ jobs:
           git rm -rf .
           git clean -fxd
 
-      - name: Push "update.json"
+      - name: Push "update.json" to gh-pages
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          cp update.json .
+          # 直接在 gh-pages 分支生成 update.json
+          ZIP_NAME="MiNavBarImmerse_${{ steps.update_version.outputs.module_version }}.zip"
+          cat <<EOF > update.json
+          {
+            "version": "${{ steps.update_version.outputs.module_version }}",
+            "versionCode": ${{ steps.update_version.outputs.module_versionCode }},
+            "zipUrl": "https://github.com/${{ github.repository }}/releases/download/${{ steps.update_version.outputs.module_version }}/$ZIP_NAME",
+            "changelog": "https://raw.githubusercontent.com/${{ github.repository }}/main/changelog.md"
+          }
+          EOF
           git add update.json
           git commit -m "Version ${{ steps.update_version.outputs.module_version }}_${{ steps.update_version.outputs.module_versionCode }}" || echo "No changes"
           git push origin gh-pages --force
+
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
