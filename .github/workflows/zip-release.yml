@@ -48,7 +48,7 @@ jobs:
 
       - name: Sort module files and update "update.json"
         run: |
-          python3 scripts/sort_release_files.py module/immerse_rules.xml list.csv || true
+          python3 scripts/sort_release_files.py module/immerse_rules.xml list.csv
 
           ZIP_NAME="MiNavBarImmerse_${{ steps.update_version.outputs.module_version }}.zip"
           cat <<EOF > update.json
@@ -65,7 +65,7 @@ jobs:
           git add module/immerse_rules.xml list.csv update.json
           if ! git diff --cached --quiet; then
             git commit -m "chore: sort immerse_rules.xml/list.csv and update.json [skip ci]"
-            git push || echo "Push failed"
+            git push
           else
             echo "No changes to commit"
           fi
@@ -74,18 +74,6 @@ jobs:
         run: |
           cd module
           zip -r ../MiNavBarImmerse_${{ steps.update_version.outputs.module_version }}.zip . -x "*/immerse_rules.xsd" "immerse_rules.xsd"
-
-      - name: Update "update.json"
-        run: |
-          ZIP_NAME="MiNavBarImmerse_${{ steps.update_version.outputs.module_version }}.zip"
-          cat <<EOF > update.json
-          {
-            "version": "${{ steps.update_version.outputs.module_version }}",
-            "versionCode": ${{ steps.update_version.outputs.module_versionCode }},
-            "zipUrl": "https://github.com/${{ github.repository }}/releases/download/AutoBuild_${{ steps.update_version.outputs.module_version }}/$ZIP_NAME",
-            "changelog": "https://raw.githubusercontent.com/Ianzb/MiNavBarImmerse/main/changelog.md"
-          }
-          EOF
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
@@ -103,15 +91,15 @@ jobs:
         
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-          COMMIT_MESSAGE="Manually run by ${{ github.actor }}"
+            COMMIT_MESSAGE="Manually run by ${{ github.actor }}"
           else
-          RAW_MSG="${{ github.event.head_commit.message }}"
-          TRIMMED_MSG=$(echo "$RAW_MSG" | sed -e '1{/^$/d}' -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+            RAW_MSG="${{ github.event.head_commit.message }}"
+            TRIMMED_MSG=$(echo "$RAW_MSG" | sed -e '1{/^$/d}' -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
 
-          COMMIT_MESSAGE="New push to GitHub
-          <pre>$TRIMMED_MSG</pre>
-          by <code>${{ github.event.head_commit.author.name }}</code>
-          See commit detail <a href='${{ github.event.head_commit.url }}'>here</a>"
+            COMMIT_MESSAGE="New push to GitHub
+            <pre>$TRIMMED_MSG</pre>
+            by <code>${{ github.event.head_commit.author.name }}</code>
+            See commit detail <a href='${{ github.event.head_commit.url }}'>here</a>"
           fi
 
           cd ${{ github.workspace }}
@@ -120,6 +108,3 @@ jobs:
                -F parse_mode="HTML" \
                -F caption="$COMMIT_MESSAGE" \
                https://api.telegram.org/bot${BOT_TOKEN}/sendDocument
-
-
-
