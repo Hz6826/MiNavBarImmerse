@@ -82,7 +82,7 @@ jobs:
 
       - name: Push "update.json" to gh-pages
         run: |
-          git clone --branch gh-pages https://github.com/${{ github.repository }} gh-pages-temp
+          git clone --branch gh-pages https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} gh-pages-temp
           cp update.json gh-pages-temp/update.json
           cd gh-pages-temp
           git config --local user.name "github-actions[bot]"
