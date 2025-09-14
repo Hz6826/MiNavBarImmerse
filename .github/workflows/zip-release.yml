@@ -48,6 +48,7 @@ jobs:
 
       - name: Sort module files and update "update.json"
         run: |
+          python3 -m pip install --user --upgrade pip || true  
           python3 scripts/sort_release_files.py module/immerse_rules.xml list.csv
 
           ZIP_NAME="MiNavBarImmerse_${{ steps.update_version.outputs.module_version }}.zip"
