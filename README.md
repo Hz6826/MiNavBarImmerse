@@ -25,11 +25,12 @@
 
 在[list.csv](list.csv)查看已适配应用信息。  
 在[rule.md](rule.md)查看适配教程和说明。  
+在[changelog.md](changelog.md)查看更新日志。  
 在[议题（Issue）](https://github.com/Ianzb/MiNavBarImmerse/issues)中提出适配要求，并提供信息。  
 在[讨论（Discussion）](https://github.com/Ianzb/MiNavBarImmerse/discussions)中查看适配经验分享，并分享你的经验。  
 在[拉取请求（Pull Request）](https://github.com/Ianzb/MiNavBarImmerse/pulls)中参与仓库贡献。  
-在[Telegram群组](https://t.me/MiNavBarImmerse)中与其他贡献者交流，并下载最新文件。
-另外，如果需要频繁参与适配工作，也可发出Issue申请协作者权限。
+在[Telegram群组](https://t.me/MiNavBarImmerse)中与其他贡献者交流，并下载最新文件。  
+另外，如果需要频繁参与适配工作，也可发出Issue申请协作者权限。  
 
 # 历史
 
