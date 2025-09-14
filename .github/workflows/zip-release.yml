@@ -112,6 +112,8 @@ jobs:
           COMMIT_MESSAGE="New push to GitHub
           <pre>$TRIMMED_MSG</pre>
           by <code>${{ github.event.head_commit.author.name }}</code>
+          Check for updates in the Root manager you are using
+          
           See commit detail <a href='${{ github.event.head_commit.url }}'>here</a>"
           fi
 
