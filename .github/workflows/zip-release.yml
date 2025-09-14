@@ -82,15 +82,14 @@ jobs:
 
       - name: Push "update.json" to gh-pages
         run: |
-          git fetch origin gh-pages || git checkout --orphan gh-pages
-          git checkout gh-pages
-          cp update.json update.json
+          git clone --branch gh-pages https://github.com/${{ github.repository }} gh-pages-temp
+          cp update.json gh-pages-temp/update.json
+          cd gh-pages-temp
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git add update.json
           git commit -m "Update update.json for ${{ steps.update_version.outputs.module_version }}_${{ steps.update_version.outputs.module_versionCode }}" || echo "No changes"
-          git push origin gh-pages
-
+          git push origin gh-pages --force
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
