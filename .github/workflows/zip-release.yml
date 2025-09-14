@@ -49,14 +49,11 @@ jobs:
       - name: Run sorting script
         run: |
           python3 -m pip install --user --upgrade pip || true
-          # Ensure script is executable and run it
           python3 scripts/sort_release_files.py module/immerse_rules.xml list.csv || true
-          # If files changed, commit them (but avoid infinite workflow runs by only committing update.json/module.prop changes)
           if ! git diff --quiet; then
             git config --local user.name "github-actions[bot]"
             git config --local user.email "github-actions[bot]@users.noreply.github.com"
             git add module/immerse_rules.xml list.csv || true
-            # Use [skip ci] so this commit doesn't retrigger workflows
             git commit -m "chore: sort immerse_rules.xml and list.csv before release [skip ci]" || echo "No changes to commit"
             git push || echo "Push failed"
           else
@@ -68,9 +65,17 @@ jobs:
           cd module
           zip -r ../MiNavBarImmerse_${{ steps.update_version.outputs.module_version }}.zip . -x "*/immerse_rules.xsd" "immerse_rules.xsd"
 
-      - name: Update "update.json"
+      - name: Update "update.json" in gh-pages
         run: |
+          # 切到 gh-pages 分支（不存在则新建）
+          git fetch origin gh-pages || true
+          git checkout gh-pages || git checkout --orphan gh-pages
+
+          # 保证分支只保留 update.json
+          find . -maxdepth 1 ! -name '.git' ! -name '.' -exec rm -rf {} +
+
           ZIP_NAME="MiNavBarImmerse_${{ steps.update_version.outputs.module_version }}.zip"
+
           cat <<EOF > update.json
           {
             "version": "${{ steps.update_version.outputs.module_version }}",
@@ -80,18 +85,10 @@ jobs:
           }
           EOF
 
-      - name: Push "update.json" to gh-pages (only keep update.json)
-        run: |
-          git fetch origin gh-pages || true
-          git checkout gh-pages || git checkout --orphan gh-pages
-          # 清空分支内容，保留 .git
-          find . -maxdepth 1 ! -name '.git' ! -name '.' -exec rm -rf {} +
-          # 拷贝新的 update.json
-          cp "${GITHUB_WORKSPACE}/update.json" update.json
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git add update.json
-          git commit -m "Version ${{ steps.update_version.outputs.module_version }}_${{ steps.update_version.outputs.module_versionCode }}" || echo "No changes"
+          git commit -m "Update update.json for version ${{ steps.update_version.outputs.module_version }}_${{ steps.update_version.outputs.module_versionCode }}" || echo "No changes"
           git push origin gh-pages --force
 
       - name: Create Release
@@ -110,15 +107,14 @@ jobs:
         
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-          COMMIT_MESSAGE="Manually run by ${{ github.actor }}"
+            COMMIT_MESSAGE="Manually run by ${{ github.actor }}"
           else
-          RAW_MSG="${{ github.event.head_commit.message }}"
-          TRIMMED_MSG=$(echo "$RAW_MSG" | sed -e '1{/^$/d}' -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
-
-          COMMIT_MESSAGE="New push to GitHub
-          <pre>$TRIMMED_MSG</pre>
-          by <code>${{ github.event.head_commit.author.name }}</code>  
-          See commit detail <a href='${{ github.event.head_commit.url }}'>here</a>"
+            RAW_MSG="${{ github.event.head_commit.message }}"
+            TRIMMED_MSG=$(echo "$RAW_MSG" | sed -e '1{/^$/d}' -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+            COMMIT_MESSAGE="New push to GitHub
+            <pre>$TRIMMED_MSG</pre>
+            by <code>${{ github.event.head_commit.author.name }}</code>  
+            See commit detail <a href='${{ github.event.head_commit.url }}'>here</a>"
           fi
 
           cd ${{ github.workspace }}
