@@ -9,7 +9,7 @@
     <package name="bin.mt.plus" enable="true" activityRule="*:2,com.byyoung.setting.HomePage.activitys.MainActivity:0,"/>
 
     <!-- 学信网 -->
-    <package name="cn.com.chsi.chsiapp" enable="true" activityRule="*:2,cn.com.chsi.chsiapp.MainActivity:1:-1"/>
+    <package name="cn.com.chsi.chsiapp" enable="true" activityRule="*:2,cn.com.chsi.chsiapp.MainActivity:1:-1,"/>
 
     <!-- 不背单词 -->
     <package name="cn.com.langeasy.LangEasyLexis" enable="false"/>
