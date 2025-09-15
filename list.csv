@@ -35,7 +35,7 @@ C,,,,,
 创建快捷方式,com.x7890.shortcutcreator,未适配,全局悬浮显示,未测试,2025-09-15
 车来了,com.ygkj.chelaile.standard,小米部分适配,,,
 菜鸟,com.cainiao.wireless,小米完美适配,,好,2025-09-13
-测试,测试,测试,测试,测试,测试
+
 ,,,,,
 D,,,,,
 DevCheck,flar2.devcheck,全局填充白色,全局悬浮显示,好,2025-09-07
@@ -134,6 +134,7 @@ MT 管理器,bin.mt.plus,全局固定白色,全局悬浮显示,好,2025-08-21
 N,,,,,
 NGA 玩家社区,gov.pianzong.androidnga,根据深浅模式填充,主页以外悬浮显示,未测试,2025-09-11
 牛客,com.nowcoder.app.florida,根据深浅模式填充,主页以外悬浮显示,未测试,2025-09-11
+你好,com.test,测试,测试,测试,测试
 ,,,,,
 P,,,,,
 平安口袋银行,com.pingan.paces.ccms,未适配,,,
