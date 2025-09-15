@@ -664,5 +664,7 @@
     <package name="xzr.konabess" enable="true" activityRule="*:2"/>
 
 
-    
+
+    <!-- 测试 -->
+    <package name="com.test" enable="true" activityRule="*:2"/>
 </NBIRules>
