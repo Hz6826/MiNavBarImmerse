@@ -57,7 +57,6 @@ jobs:
           python3 -m pip install --user --upgrade pip || true
           pip3 install --user pypinyin || true
 
-          # 运行格式化脚本（可能修改文件）
           python3 scripts/sort_release_files.py module/immerse_rules.xml list.csv
 
           ZIP_NAME="MiNavBarImmerse_${{ steps.update_version.outputs.module_version }}.zip"

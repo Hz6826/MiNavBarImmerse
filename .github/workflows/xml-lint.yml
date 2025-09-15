@@ -1,52 +1,34 @@
-# name: XML Validation
+name: XML Validation
 
-# on:
-#   push:
-#     branches: [ main ]
-#     paths:
-#       - 'module/immerse_rules.xml'
-#       - 'module/immerse_rules.xsd'
-#   pull_request:
-#     branches: [ main ]
-#     paths:
-#       - 'module/immerse_rules.xml'
-#       - 'module/immerse_rules.xsd'
-#   workflow_dispatch:
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'module/immerse_rules.xml'
+      - 'module/immerse_rules.xsd'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'module/immerse_rules.xml'
+      - 'module/immerse_rules.xsd'
 
-# jobs:
-#   validate-xml:
-#     runs-on: ubuntu-latest
+jobs:
+  validate-xml:
+    runs-on: ubuntu-latest
     
-#     steps:
-#     - name: Checkout code
-#       uses: actions/checkout@v4
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
       
-#     - name: Install libxml2-utils
-#       run: sudo apt-get update && sudo apt-get install -y libxml2-utils
+    - name: Install libxml2-utils
+      run: sudo apt-get update && sudo apt-get install -y libxml2-utils
       
-#     - name: Validate XML files
-#       run: |
-#         XML_FILE="module/immerse_rules.xml"
-#         XSD_FILE="module/immerse_rules.xsd"
-
-#         if [ ! -f "$XSD_FILE" ]; then
-#           echo "XSD schema file not found!"
-#           exit 1
-#         fi
-
-#         echo "Validating $XML_FILE against $XSD_FILE..."
-
-#         xmllint --schema "$XSD_FILE" --noout "$XML_FILE" 2>&1 | while read line; do
-#           if [[ "$line" =~ ^($XML_FILE:([0-9]+):)\ element\ ([^:]+): ]]; then
-#             prefix=${BASH_REMATCH[1]}
-#             lineno=${BASH_REMATCH[2]}
-#             echo -e "\033[1;31mLine $lineno:\033[0m ${line#"$prefix"}"
-#           elif [[ "$line" =~ ^$XML_FILE:([0-9]+):\ parser\ error ]]; then
-#             lineno=${BASH_REMATCH[1]}
-#             echo -e "\033[1;31mLine $lineno: XML format error\033[0m"
-#           else
-#             echo "$line"
-#           fi
-#         exit 1
-#         done
-
+    - name: Validate XML files
+      run: |
+        if [ -f "module/immerse_rules.xsd" ]; then
+          echo "Validating XML against XSD schema..."
+          xmllint --schema module/immerse_rules.xsd --noout module/immerse_rules.xml
+        else
+          echo "XSD schema file not found!"
+          exit 1
+        fi
