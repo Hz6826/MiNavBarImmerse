@@ -8,6 +8,9 @@
     <!-- MT管理器 -->
     <package name="bin.mt.plus" enable="true" activityRule="*:2,com.byyoung.setting.HomePage.activitys.MainActivity:0"/>
 
+    <!-- test -->
+    <package name="bryant.kobe" enable="true" activityRule="*:2"/>
+
     <!-- 学信网 -->
     <package name="cn.com.chsi.chsiapp" enable="true" activityRule="*:2,cn.com.chsi.chsiapp.MainActivity:1:-1"/>
 
@@ -672,12 +675,4 @@
     <!-- KonaBess -->
     <package name="xzr.konabess" enable="true" activityRule="*:2"/>
 
-
-
-
-
-    
-
-    <!-- test -->
-    <package name="bryant.kobe" enable="true" activityRule="*:2"/>
 </NBIRules>
