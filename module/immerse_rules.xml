@@ -633,8 +633,6 @@
     <!-- DevCheck -->
     <package name="flar2.devcheck" enable="true" activityRule="*:2"/>
 
-    <!-- Konabess -->
-    <package name="xzr.konabess" enable="true" activityRule="*:2"/>
     <!-- Thanox -->
     <package name="github.tornaco.android.thanos" enable="true" activityRule="*:2"/>
 
@@ -662,5 +660,7 @@
     <!-- DSU Sideloader -->
     <package name="vegabobo.dsusideloader" enable="true" activityRule="*:2"/>
 
+    <!-- Konabess -->
+    <package name="xzr.konabess" enable="true" activityRule="*:2"/>
 
 </NBIRules>
