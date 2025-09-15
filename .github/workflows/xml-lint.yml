@@ -11,6 +11,7 @@ on:
     paths:
       - 'module/immerse_rules.xml'
       - 'module/immerse_rules.xsd'
+  workflow_dispatch:
 
 jobs:
   validate-xml:
