@@ -101,8 +101,8 @@ J,,,,,
 今日头条,com.ss.android.article.news,小米部分适配,,,
 今日头条极速版,com.ss.android.article.lite,小米部分适配,,,
 今日校园,com.wisedu.cpdaily,未适配,,,
-交通银行,com.bankcomm.Bankcomm,未适配,,,
 今天是个上分的好日子,com.test,测试,测试,测试,测试
+交通银行,com.bankcomm.Bankcomm,未适配,,,
 ,,,,,
 K,,,,,
 Keep,com.gotokeep.keep,小米部分适配,,,
@@ -134,8 +134,8 @@ MT 管理器,bin.mt.plus,全局固定白色,全局悬浮显示,好,2025-08-21
 ,,,,,
 N,,,,,
 NGA 玩家社区,gov.pianzong.androidnga,根据深浅模式填充,主页以外悬浮显示,未测试,2025-09-11
-牛客,com.nowcoder.app.florida,根据深浅模式填充,主页以外悬浮显示,未测试,2025-09-11
 你好,com.test,测试,测试,测试,测试
+牛客,com.nowcoder.app.florida,根据深浅模式填充,主页以外悬浮显示,未测试,2025-09-11
 ,,,,,
 P,,,,,
 平安口袋银行,com.pingan.paces.ccms,未适配,,,
@@ -252,7 +252,6 @@ Y,,,,,
 渝通行,cn.com.whty.cqt,全局悬浮显示,,,
 应用宝,com.tencent.android.qqdownloader,小米部分适配,,,
 音乐标签,com.xjcheng.musictageditor,全局填充白色,全局悬浮显示,好,2025-09-10
-应用名称,应用包名,适配前,适配后,适配效果,更新日期
 ,,,,,
 Z,,,,,
 自动点击器,com.zidongdianji,全局填充白色,主页填充底栏颜色,好,2025-08-21
