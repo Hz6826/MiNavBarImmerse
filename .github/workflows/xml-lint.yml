@@ -23,7 +23,7 @@ jobs:
     - name: Install libxml2-utils
       run: sudo apt-get update && sudo apt-get install -y libxml2-utils
       
-    - name: Validate XML files
+    - name: Validate XML files with red line numbers
       run: |
         XML_FILE="module/immerse_rules.xml"
         XSD_FILE="module/immerse_rules.xsd"
@@ -36,15 +36,10 @@ jobs:
         echo "Validating $XML_FILE against $XSD_FILE..."
 
         xmllint --schema "$XSD_FILE" --noout "$XML_FILE" 2>&1 | while read line; do
-          if [[ "$line" =~ ^($XML_FILE:([0-9]+):)\ element\ ([^:]+): ]]; then
-            prefix=${BASH_REMATCH[1]}
-            lineno=${BASH_REMATCH[2]}
-            echo -e "\033[1;31mLine $lineno:\033[0m ${line#"$prefix"}"
-          elif [[ "$line" =~ ^$XML_FILE:([0-9]+):\ parser\ error ]]; then
-            lineno=${BASH_REMATCH[1]}
-            echo -e "\033[1;31mLine $lineno: XML format ERROR\033[0m"
+          if [[ "$line" =~ ^($XML_FILE:([0-9]+):) ]]; then
+            prefix=${BASH_REMATCH[1]}   # XML_FILE:行号:
+            echo -e "\033[1;31m$prefix\033[0m${line#"$prefix"}"
           else
             echo "$line"
           fi
-        done
 
