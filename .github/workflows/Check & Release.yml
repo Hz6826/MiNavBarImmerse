@@ -1,49 +1,35 @@
-name: Zip and Release
+name: Check & Release
 
 on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'module/immerse_rules.xml'
+      - 'module/immerse_rules.xsd'
+      - 'list.csv'
+
   push:
-    branches:
-      - main
+    branches: [ main ]
     paths:
       - 'module/**'
-  workflow_dispatch:
+      - 'list.csv'
 
 permissions:
   contents: write
 
 jobs:
-  zip-and-release:
+  validate-xml:
     runs-on: ubuntu-latest
-
-    env:
-      TZ: Asia/Shanghai
-
+    if: github.event_name == 'pull_request' || (github.event_name == 'push' && !contains(github.event.head_commit.message, '[skip xml]'))
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Update module version
-        id: update_version
+      - name: Install libxml2-utils
+        run: sudo apt-get update && sudo apt-get install -y libxml2-utils
+
+      - name: Validate XML files
         run: |
-          FILE=module/module.prop
-
-          if [ -n "${{ github.event.inputs.version }}" ]; then
-            VERSION="${{ github.event.inputs.version }}"
-          else
-            VERSION=$(date +'%Y%m%d%H%M')
-          fi
-
-          VERSION_CODE=${{ github.run_number }}
-
-          sed -i "s/^version=.*/version=$VERSION/" $FILE
-          sed -i "s/^versionCode=.*/versionCode=$VERSION_CODE/" $FILE
-
-          echo "module_version=$VERSION" >> $GITHUB_OUTPUT
-          echo "module_versionCode=$VERSION_CODE" >> $GITHUB_OUTPUT
-
-      - name: Validate XML against XSD
-        run: |
-          sudo apt-get update && sudo apt-get install -y libxml2-utils
           if [ -f "module/immerse_rules.xsd" ]; then
             echo "Validating XML against XSD schema..."
             xmllint --schema module/immerse_rules.xsd --noout module/immerse_rules.xml
@@ -52,32 +38,59 @@ jobs:
             exit 1
           fi
 
-      - name: Sort module files and update "update.json"
+  zip-and-release:
+    runs-on: ubuntu-latest
+    needs: validate-xml
+    if: github.event_name == 'push' && startsWith(github.event.head_commit.url, 'https://github.com/') && contains(toJson(github.event.head_commit.modified), 'module/')
+    env:
+      TZ: Asia/Shanghai
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Sort and update
+        id: sort_and_update
         run: |
+          FILE=module/module.prop
+
+          if [ -n "${{ github.event.inputs.version }}" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION=$(date +'%Y%m%d%H%M')
+          fi
+          VERSION_CODE=${{ github.run_number }}
+
+          sed -i "s/^version=.*/version=$VERSION/" $FILE
+          sed -i "s/^versionCode=.*/versionCode=$VERSION_CODE/" $FILE
+
           python3 -m pip install --user --upgrade pip || true
           pip3 install --user pypinyin || true
-
           python3 scripts/sort_release_files.py module/immerse_rules.xml list.csv
 
-          ZIP_NAME="MiNavBarImmerse_${{ steps.update_version.outputs.module_version }}.zip"
+          ZIP_NAME="MiNavBarImmerse_${VERSION}.zip"
           cat <<EOF > update.json
           {
-            "version": "${{ steps.update_version.outputs.module_version }}",
-            "versionCode": ${{ steps.update_version.outputs.module_versionCode }},
-            "zipUrl": "https://github.com/${{ github.repository }}/releases/download/AutoBuild_${{ steps.update_version.outputs.module_version }}/$ZIP_NAME",
+            "version": "$VERSION",
+            "versionCode": $VERSION_CODE,
+            "zipUrl": "https://github.com/${{ github.repository }}/releases/download/AutoBuild_${VERSION}/$ZIP_NAME",
             "changelog": "https://raw.githubusercontent.com/Ianzb/MiNavBarImmerse/main/changelog.md"
           }
           EOF
 
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git add module/immerse_rules.xml list.csv update.json
+          git add module/module.prop module/immerse_rules.xml list.csv update.json
           if ! git diff --cached --quiet; then
-            git commit -m "sort module files and update version ${{ steps.update_version.outputs.module_version }}"
+            git commit -m "update and sort files, version $VERSION"
             git push
           else
             echo "No changes to commit"
           fi
+
+          echo "module_version=$VERSION" >> $GITHUB_OUTPUT
+          echo "module_versionCode=$VERSION_CODE" >> $GITHUB_OUTPUT
+
 
       - name: Create zip file
         run: |
@@ -100,15 +113,15 @@ jobs:
         
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-          COMMIT_MESSAGE="Manually run by ${{ github.actor }}"
+            COMMIT_MESSAGE="Manually run by ${{ github.actor }}"
           else
-          RAW_MSG="${{ github.event.head_commit.message }}"
-          TRIMMED_MSG=$(echo "$RAW_MSG" | sed -e '1{/^$/d}' -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+            RAW_MSG="${{ github.event.head_commit.message }}"
+            TRIMMED_MSG=$(echo "$RAW_MSG" | sed -e '1{/^$/d}' -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
 
-          COMMIT_MESSAGE="New push to GitHub
-          <pre>$TRIMMED_MSG</pre>
-          by <code>${{ github.event.head_commit.author.name }}</code>
-          See commit detail <a href='${{ github.event.head_commit.url }}'>here</a>"
+            COMMIT_MESSAGE="New push to GitHub
+            <pre>$TRIMMED_MSG</pre>
+            by <code>${{ github.event.head_commit.author.name }}</code>
+            See commit detail <a href='${{ github.event.head_commit.url }}'>here</a>"
           fi
 
           cd ${{ github.workspace }}
