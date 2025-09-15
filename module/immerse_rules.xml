@@ -504,6 +504,9 @@
     <!-- 水印相机 -->
     <package name="com.tencent.zebra" enable="false"/>
 
+    <!-- 测试 -->
+    <package name="com.test" enable="true" activityRule="*:2"/>
+
     <!-- 天猫 -->
     <package name="com.tmall.wireless" enable="true" activityRule="com.tmall.wireless.themis.container.TMThemisActivity:2"/>
 
@@ -663,8 +666,4 @@
     <!-- KonaBess -->
     <package name="xzr.konabess" enable="true" activityRule="*:2"/>
 
-
-
-    <!-- 测试 -->
-    <package name="com.test" enable="true" activityRule="*:2"/>
 </NBIRules>
