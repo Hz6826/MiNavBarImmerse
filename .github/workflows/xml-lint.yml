@@ -11,12 +11,10 @@ on:
     paths:
       - 'module/immerse_rules.xml'
       - 'module/immerse_rules.xsd'
-  workflow_dispatch:
 
 jobs:
   validate-xml:
     runs-on: ubuntu-latest
-    container: ubuntu:22.04
     
     steps:
     - name: Checkout code
@@ -24,7 +22,7 @@ jobs:
       
     - name: Install libxml2-utils
       run: sudo apt-get update && sudo apt-get install -y libxml2-utils
-
+      
     - name: Validate XML files
       run: |
         XML_FILE="module/immerse_rules.xml"
