@@ -1,17 +1,20 @@
-# 2025-09-14
+# 2025-09-15
 ### 新增
-- 优化排序方式，在打包前自动格式化代码
-
-# 2025-09-13
-### 新增
-- 米游社部分页面
-- QQ适配通知设置等页面
-- 新增一木记账悬浮显示
+- 创建快捷方式 by @ChenXiaoming233
+- 取件助手 by @ChenXiaoming233
+- 什么值得买 by @ChenXiaoming233
+- 西窗烛 by @ChenXiaoming233
+- 中国电信 by @ChenXiaoming233
+- 中国广电 by @ChenXiaoming233
+- 中国建设银行 by @ChenXiaoming233
+- 中国联通 by @ChenXiaoming233
+- 中国移动 by @ChenXiaoming233
+- 最会买 by @ChenXiaoming233
+- 知乎日报 by @ChenXiaoming233
 
 ### 优化
-- 九号出行
-- 因Edge输入密码后会变成黑色，取消主页适配
-- 因Seestar浏览器界面切换会变黑色，取消适配改为背景取色
-
-### 调整
-- 部分代码结构
+- Edge by @ChenXiaoming233
+- Github by @ChenXiaoming233
+- Thanox by @ChenXiaoming233
+- 大众点评 by @ChenXiaoming233
+- 微信 by @ChenXiaoming233

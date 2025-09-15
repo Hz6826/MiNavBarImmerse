@@ -65,7 +65,7 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git add module/immerse_rules.xml list.csv update.json
           if ! git diff --cached --quiet; then
-            git commit -m "chore: sort immerse_rules.xml/list.csv and update.json [skip ci]"
+            git commit -m "sort module files and update version ${{ steps.update_version.outputs.module_version }}"
             git push
           else
             echo "No changes to commit"
@@ -92,20 +92,22 @@ jobs:
         
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            COMMIT_MESSAGE="Manually run by ${{ github.actor }}"
+          COMMIT_MESSAGE="Manually run by ${{ github.actor }}"
           else
-            RAW_MSG="${{ github.event.head_commit.message }}"
-            TRIMMED_MSG=$(echo "$RAW_MSG" | sed -e '1{/^$/d}' -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+          RAW_MSG="${{ github.event.head_commit.message }}"
+          TRIMMED_MSG=$(echo "$RAW_MSG" | sed -e '1{/^$/d}' -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
 
-            COMMIT_MESSAGE="New push to GitHub
-            <pre>$TRIMMED_MSG</pre>
-            by <code>${{ github.event.head_commit.author.name }}</code>
-            See commit detail <a href='${{ github.event.head_commit.url }}'>here</a>"
+          COMMIT_MESSAGE="New push to GitHub
+          <pre>$TRIMMED_MSG</pre>
+          by <code>${{ github.event.head_commit.author.name }}</code>
+          See commit detail <a href='${{ github.event.head_commit.url }}'>here</a>"
           fi
 
           cd ${{ github.workspace }}
           curl -F chat_id=${GROUP_ID} \
+               -F message_thread_id=39 \
                -F document=@"${ZIP_FILE}" \
                -F parse_mode="HTML" \
                -F caption="$COMMIT_MESSAGE" \
                https://api.telegram.org/bot${BOT_TOKEN}/sendDocument
+
