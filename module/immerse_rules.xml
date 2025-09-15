@@ -663,4 +663,5 @@
     <!-- KonaBess -->
     <package name="xzr.konabess" enable="true" activityRule="*:2"/>
 
+    
 </NBIRules>
