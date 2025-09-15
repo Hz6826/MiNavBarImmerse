@@ -35,20 +35,13 @@ jobs:
 
         echo "Validating $XML_FILE against $XSD_FILE..."
 
-        output=$(xmllint --schema "$XSD_FILE" --noout "$XML_FILE" 2>&1)
-        xmllint_exit=$?
-
-        echo "$output" | while read line; do
-          if [[ "$line" =~ ^($XML_FILE:([0-9]+):) ]]; then
+        xmllint --schema "$XSD_FILE" --noout "$XML_FILE" 2>&1 | while read line; do
+          if [[ "$line" =~ ^($XML_FILE:([0-9]+):)\ element\ ([^:]+): ]]; then
             prefix=${BASH_REMATCH[1]}
-            echo -e "\033[1;31mLine ${BASH_REMATCH[2]}:\033[0m ${line#"$prefix"}"
+            lineno=${BASH_REMATCH[2]}
+            echo -e "\033[1;31mLine $lineno:\033[0m ${line#"$prefix"}"
           else
             echo "$line"
           fi
+        exit 1
         done
-
-        if [ $xmllint_exit -ne 0 ]; then
-          exit 1
-        fi
-
-
