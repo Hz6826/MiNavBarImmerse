@@ -38,6 +38,9 @@
     <!-- U 校园 AI 版 -->
     <package name="cn.unipus.cloud" enable="true" activityRule="*:2,cn.unipus.cloud.mvvm.view.activity.MainActivity:1:-1,cn.unipus.cloud.my.student.mvvm.view.activity.UserInfoDetailActivity:1:-1"/>
 
+    <!-- Salt Player -->
+    <package name="salt.player.test" enable="true" activityRule="*:2"/>
+
     <!-- WPS Office国际版 -->
     <package name="cn.wps.moffice_eng" enable="true" activityRule="cn.wps.moffice.plugin.PluginHostBridgeActivity:0,cn.wps.moffice.main.local.HomeRootActivity:1:1"/>
 
