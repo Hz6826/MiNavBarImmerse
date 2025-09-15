@@ -12,7 +12,6 @@ on:
     branches: [ main ]
     paths:
       - 'module/**'
-      - 'list.csv'
   workflow_dispatch:
 
 permissions:
@@ -21,7 +20,6 @@ permissions:
 jobs:
   Validate-XML:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' || (github.event_name == 'push' && !contains(github.event.head_commit.message, '[skip xml]'))
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
