@@ -124,6 +124,10 @@ def sort_csv(csv_path: Path) -> bool:
         print(f"Empty CSV: {csv_path}")
         return False
 
+    # 重新赋值 header, raw_rows
+    header = filtered_rows[0]
+    raw_rows = filtered_rows[1:]
+
     # 去除全为空的空行
     cleaned = [r for r in raw_rows if any((cell and str(cell).strip()) for cell in r)]
 

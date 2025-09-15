@@ -672,12 +672,9 @@
     <!-- KonaBess -->
     <package name="xzr.konabess" enable="true" activityRule="*:2"/>
 
-    <!-- 测测测111 -->
-    <package name="kobe.bryant" enable="true" activityRule="*:2"/>
 
 
 
-
-    
-
+    <!-- test -->
+    <package name="bryant.kobe" enable="true" activityRule="*:2"/>
 </NBIRules>
