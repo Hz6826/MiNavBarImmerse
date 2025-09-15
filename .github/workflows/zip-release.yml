@@ -7,11 +7,6 @@ on:
     paths:
       - 'module/**'
   workflow_dispatch:
-    inputs:
-      version:
-        description: '指定版本号（留空为RunID）'
-        required: false
-        default: ''
 
 permissions:
   contents: write
@@ -105,7 +100,6 @@ jobs:
 
           cd ${{ github.workspace }}
           curl -F chat_id=${GROUP_ID} \
-               -F message_thread_id=39 \
                -F document=@"${ZIP_FILE}" \
                -F parse_mode="HTML" \
                -F caption="$COMMIT_MESSAGE" \
