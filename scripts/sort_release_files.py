@@ -83,7 +83,7 @@ def sort_xml(xml_path: Path) -> bool:
 
 def sort_csv(csv_path: Path) -> bool:
     # ====== 更新：硬编码当前CSV标头 ======
-    STANDARD_HEADER = ["应用名称", "应用包名", "适配前", "适配后", "适配效果", "更新日期"]
+    STANDARD_HEADER = ["应用名称", "应用包名", "适配前", "适配后", "适配效果", "更新日期", ""]
 
     # 读取 CSV 内容并按行拆分
     text = csv_path.read_text(encoding='utf-8')
@@ -123,6 +123,25 @@ def sort_csv(csv_path: Path) -> bool:
     if not reader:
         print(f"Empty CSV: {csv_path}")
         return False
+
+    # ====== 更新：去除所有重复表头，仅保留顶部一个 ======
+    def is_standard_header(row):
+        return [c.strip() for c in row] == [c.strip() for c in STANDARD_HEADER]
+
+    # 收集所有非表头行，统计表头出现次数
+    filtered_rows = []
+    header_found = False
+    for row in reader:
+        if is_standard_header(row):
+            if not header_found:
+                header_found = True
+                filtered_rows.append(STANDARD_HEADER)
+            # 跳过后续所有表头
+            continue
+        filtered_rows.append(row)
+    if not header_found:
+        # 顶部插入标准表头
+        filtered_rows = [STANDARD_HEADER] + filtered_rows
 
     # 重新赋值 header, raw_rows
     header = filtered_rows[0]
