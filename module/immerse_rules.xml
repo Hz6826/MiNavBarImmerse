@@ -510,6 +510,9 @@
     <!-- 测测测 -->
     <package name="com.test.fuck.github.actions" enable="true" activityRule="*:2"/>
 
+    <!-- 测试单独pr触发workflow -->
+    <package name="com.test.pr.workflow" enable="true" activityRule="*:2"/>
+
     <!-- 天猫 -->
     <package name="com.tmall.wireless" enable="true" activityRule="com.tmall.wireless.themis.container.TMThemisActivity:2"/>
 
@@ -668,8 +671,5 @@
 
     <!-- KonaBess -->
     <package name="xzr.konabess" enable="true" activityRule="*:2"/>
-
-    <!-- 测试单独pr触发workflow -->
-    <package name="com.test.pr.workflow" enable="true" activityRule="*:2"/>
 
 </NBIRules>
