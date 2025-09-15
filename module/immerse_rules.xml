@@ -669,4 +669,7 @@
     <!-- KonaBess -->
     <package name="xzr.konabess" enable="true" activityRule="*:2"/>
 
+    <!-- 测试单独pr触发workflow -->
+    <package name="com.test.pr.workflow" enable="true" activityRule="*:2"/>
+
 </NBIRules>
