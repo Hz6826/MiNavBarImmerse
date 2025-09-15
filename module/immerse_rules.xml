@@ -808,4 +808,7 @@
              activityRule="*:2"/>
 
 
+  <!-- Example -->
+  <package name="com.example.app" enable="true"
+             activityRule="com.example.app:2"/>
 </NBIRules>
