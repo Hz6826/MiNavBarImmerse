@@ -678,4 +678,6 @@
     <!-- KonaBess -->
     <package name="xzr.konabess" enable="true" activityRule="*:2"/>
 
+    <!-- 123 -->
+    <package name="33.test.app" enable="true" activityRule="*:2"/>
 </NBIRules>
