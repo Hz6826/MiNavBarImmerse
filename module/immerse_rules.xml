@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <NBIRules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:noNamespaceSchemaLocation="immerse_rules.xsd"><!-- 百度地图 -->
+                xsi:noNamespaceSchemaLocation="immerse_rules.xsd">
+
+    <!-- 百度地图 -->
     <package name="com.baidu.BaiduMap" enable="true" activityRule="*:2"/>
 
     <!-- 百度翻译 -->
