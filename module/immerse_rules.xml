@@ -6,7 +6,7 @@
     <package name="air.tv.douyu.android" enable="true" activityRule="com.douyu.module.player.p.socialinteraction.functions.switch_room.AudioPlayerPagerActivity:0,com.douyu.module.list.view.activity.CustomHomeSetupBActivity:1:1,com.douyu.sdk.rn.activity.DYReactActivity:1:-1,com.douyu.module.vod.p.voddownload.VodDownloadActivity:1:1"/>
 
     <!-- MT管理器 -->
-    <package name="bin.mt.plus" enable="true" activityRule="*:2,com.byyoung.setting.HomePage.activitys.MainActivity:0"/>
+    <package name="bin.mt.plus" enable="true" activityRule="com.byyoung.setting.HomePage.activitys.MainActivity:5"/>
 
     <!-- 学信网 -->
     <package name="cn.com.chsi.chsiapp" enable="true" activityRule="*:2,cn.com.chsi.chsiapp.MainActivity:1:-1"/>
